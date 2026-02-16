@@ -1,119 +1,125 @@
-body 
-    font-family: 'Quicksand', sans-serif;
-    background: linear-gradient(135deg, #a8edea, #fed6e3, #d299c2);
-    color: #333;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    animation: fadeIn 1s ease-in;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('stickerCanvas');
+    const ctx = canvas.getContext('2d');
+    const textInput = document.getElementById('textInput');
+    const fontSelect = document.getElementById('fontSelect');
+    const colorPicker = document.getElementById('colorPicker');
+    const addTextBtn = document.getElementById('addTextBtn');
+    const addEmojiBtn = document.getElementById('addEmojiBtn');
+    const addMemeBtn = document.getElementById('addMemeBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const jokeText = document.getElementById('jokeText');
+    const newJokeBtn = document.getElementById('newJokeBtn');
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+    // Initialize canvas
+    ctx.fillStyle = '#ffeaa7';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#000';
+    ctx.font = '20px Quicksand';
+    ctx.fillText('Draw your funny sticker!', 120, 200);
+    console.log('Canvas initialized.');
 
-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
+    // Load initial joke
+    fetchJoke();
 
-h1 {
-    font-size: 2.5em;
-    color: #ff9ff3;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-10px); }
-    60% { transform: translateY(-5px); }
-}
-
-.sticker-maker {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-    backdrop-filter: blur(15px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 500px;
-    width: 100%;
-}
-
-canvas {
-    border: 3px solid #ddd;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    cursor: crosshair;
-}
-
-.controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-button, input, select {
-    padding: 12px 15px;
-    border: none;
-    border-radius: 10px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-button {
-    background: linear-gradient(45deg, #74b9ff, #0984e3);
-    color: white;
-}
-
-button:hover {
-    background: linear-gradient(45deg, #0984e3, #74b9ff);
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-input, select {
-    background: #f8f9fa;
-    border: 1px solid #ccc;
-}
-
-input:focus, select:focus {
-    outline: none;
-    border-color: #74b9ff;
-    box-shadow: 0 0 5px rgba(116, 185, 255, 0.5);
-}
-
-.joke-section {
-    text-align: center;
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-}
-
-#jokeText {
-    font-style: italic;
-    color: #6c5ce7;
-}
-
-@media (max-width: 600px) {
-    .controls {
-        flex-direction: column;
-        align-items: center;
+    function fetchJoke() {
+        fetch('https://icanhazdadjoke.com/', { headers: { 'Accept': 'application/json' } })
+            .then(response => {
+                if (!response.ok) throw new Error('Joke fetch failed');
+                return response.json();
+            })
+            .then(data => {
+                jokeText.textContent = data.joke;
+                console.log('Joke loaded:', data.joke);
+            })
+            .catch(error => {
+                console.error('Joke error:', error);
+                jokeText.textContent = 'Why did the scarecrow win an award? Because he was outstanding in his field!';
+            });
     }
-    canvas {
-        width: 100%;
-        height: auto;
+
+    newJokeBtn.addEventListener('click', () => {
+        console.log('New joke button clicked.');
+        fetchJoke();
+    });
+
+    // Add text
+    addTextBtn.addEventListener('click', () => {
+        console.log('Add text button clicked.');
+        const text = textInput.value;
+        if (text) {
+            ctx.fillStyle = colorPicker.value;
+            ctx.font = `24px ${fontSelect.value}`;
+            ctx.fillText(text, 50, 100 + Math.random() * 200);
+            textInput.value = '';
+            playSound('add');
+            console.log('Text added to canvas.');
+        } else {
+            console.log('No text entered.');
+        }
+    });
+
+    // Add random emoji
+    addEmojiBtn.addEventListener('click', () => {
+        console.log('Add emoji button clicked.');
+        const emojis = ['😂', '🤣', '😜', '🤪', '🥳'];
+        const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+        ctx.fillStyle = colorPicker.value;
+        ctx.font = '40px Arial';
+        ctx.fillText(emoji, 150 + Math.random() * 100, 150 + Math.random() * 100);
+        playSound('emoji');
+        console.log('Emoji added.');
+    });
+
+    // Add meme template
+    addMemeBtn.addEventListener('click', () => {
+        console.log('Add meme button clicked.');
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, 50);
+        ctx.fillStyle = '#000';
+        ctx.font = '20px Impact';
+        ctx.fillText('WHEN YOU CREATE A FUNNY STICKER', 20, 30);
+        playSound('meme');
+        console.log('Meme added.');
+    });
+
+    // Clear canvas
+    clearBtn.addEventListener('click', () => {
+        console.log('Clear button clicked.');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#ffeaa7';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        playSound('clear');
+        console.log('Canvas cleared.');
+    });
+
+    // Download
+    downloadBtn.addEventListener('click', () => {
+        console.log('Download button clicked.');
+        const link = document.createElement('a');
+        link.download = 'funny-sticker.png';
+        link.href = canvas.toDataURL();
+        link.click();
+        playSound('download');
+        console.log('Sticker downloaded.');
+    });
+
+    // Simple sound effects
+    function playSound(type) {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.setValueAtTime(type === 'add' ? 800 : type === 'emoji' ? 600 : type === 'meme' ? 400 : 200, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.1);
+            console.log('Sound played for:', type);
+        } catch (error) {
+            console.error('Sound error:', error);
+        }
     }
-}
+});
