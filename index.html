@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funny Sticker Maker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>🎈 Funny Sticker Creator 🎈</h1>
+        <p>Design hilarious stickers with style!</p>
+    </header>
+    <main>
+        <div class="sticker-maker">
+            <canvas id="stickerCanvas" width="400" height="400"></canvas>
+            <div class="controls">
+                <input type="text" id="textInput" placeholder="Type a funny phrase...">
+                <select id="fontSelect">
+                    <option value="Comic Sans MS">Comic Sans (Funny)</option>
+                    <option value="Impact">Impact (Meme Style)</option>
+                    <option value="Quicksand">Quicksand (Aesthetic)</option>
+                </select>
+                <input type="color" id="colorPicker" value="#000000">
+                <button id="addTextBtn">Add Text</button>
+                <button id="addEmojiBtn">Add Random Emoji</button>
+                <button id="addMemeBtn">Add Meme Template</button>
+                <button id="clearBtn">Clear</button>
+                <button id="downloadBtn">Download Sticker</button>
+            </div>
+            <div class="joke-section">
+                <p id="jokeText">Loading a joke...</p>
+                <button id="newJokeBtn">New Joke</button>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
