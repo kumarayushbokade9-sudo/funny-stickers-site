@@ -1,4 +1,4 @@
-body {
+body 
     font-family: 'Quicksand', sans-serif;
     background: linear-gradient(135deg, #a8edea, #fed6e3, #d299c2);
     color: #333;
